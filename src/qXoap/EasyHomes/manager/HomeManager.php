@@ -10,8 +10,6 @@ use qXoap\EasyHomes\Loader;
 
 class HomeManager {
 
-    public const PREFIX = "§8(§eEasyHomes§8) §7";
-
     public function getHomes(Player $player): Config
     {
         return new Config(Loader::getInstance()->getDataFolder() . "data/".$player->getName().".yml", Config::YAML);
@@ -26,6 +24,11 @@ class HomeManager {
             }
         }
         return false;
+    }
+
+    public static function getPrefix()
+    {
+        return Loader::getInstance()->getHomeMesages("prefix");
     }
 
     public function setHome(Player $player, string $name, Position $position)
@@ -53,11 +56,29 @@ class HomeManager {
             if($data === null){
                 return;
             }
-
-            if(!$this->isHomeExist($player, $data)){
-                $player->sendMessage(self::PREFIX."");
+            if(count($this->getHomes($player)->getAll(true)) < 0){
                 return;
             }
+
+            if(is_null($this->getHomes($player)->getAll(true))){
+                return;
+            }
+
+            if(!$this->isHomeExist($player, $data)){
+                $player->sendMessage(self::getPrefix().Loader::getInstance()->getHomeMesages("no-exist-home"));
+                return;
+            }
+
+            $x = $this->getHomes($player)->get($data)["X"];
+            $y = $this->getHomes($player)->get($data)["Y"];
+            $z = $this->getHomes($player)->get($data)["Z"];
+            $world = $this->getHomes($player)->get($data)["world"];
+            $name = $this->getHomes($player)->get($data)["name"];
+            $player->teleport(new Position($x, $y, $z, $world));
+            $message = Loader::getInstance()->getHomeMesages("teleport-home-message");
+            $message = str_replace("{HOME}", $name, $message);
+            $player->sendMessage(self::getPrefix().$message);
+
         });
         $menu->setTitle("§8".$player->getName()."§5 Homes");
         if(is_null($this->getHomes($player)->getAll(true))){
