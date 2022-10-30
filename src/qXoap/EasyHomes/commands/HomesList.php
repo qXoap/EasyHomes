@@ -5,9 +5,12 @@ namespace qXoap\EasyHomes\commands;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
+use pocketmine\utils\Config;
+use qXoap\EasyHomes\Loader;
 use qXoap\EasyHomes\manager\HomeManager;
 
-class HomesList extends Command {
+class HomesList extends Command
+{
 
     public function __construct()
     {
@@ -16,7 +19,7 @@ class HomesList extends Command {
 
     public function execute(CommandSender $player, string $commandLabel, array $args)
     {
-        if(!$player instanceof Player)return;
+        if (!$player instanceof Player) return;
 
         HomeManager::getInstance()->getHomesForm($player);
     }

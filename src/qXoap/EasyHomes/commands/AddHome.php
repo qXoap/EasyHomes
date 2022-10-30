@@ -34,7 +34,7 @@ class AddHome extends Command {
 
         $maxhomes = Loader::getInstance()->getHomeConfig("max-homes");
 
-        if(count(HomeManager::getInstance()->getHomes($player)->getAll(true)) > $maxhomes){
+        if(count(HomeManager::getInstance()->getHomes($player)->getAll(true)) >= $maxhomes){
             $msg = Loader::getInstance()->getHomeMesages("homes-limit-message");
             $msg = str_replace("{MAXHOMES}", $maxhomes, $msg);
             $player->sendMessage(HomeManager::getPrefix().TextFormat::colorize($msg));

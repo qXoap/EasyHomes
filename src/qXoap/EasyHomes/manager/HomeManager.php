@@ -4,6 +4,7 @@ namespace qXoap\EasyHomes\manager;
 
 use Forms\FormAPI\SimpleForm;
 use pocketmine\player\Player;
+use pocketmine\Server;
 use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
 use pocketmine\utils\TextFormat;
@@ -16,6 +17,13 @@ class HomeManager {
     public function __construct()
     {
         self::setInstance($this);
+    }
+
+    public static function prepare(): void
+    {
+        if(!is_dir(Loader::getInstance()->getDataFolder() . "data/")){
+            mkdir(Loader::getInstance()->getDataFolder() . "data/");
+        }
     }
 
     public function getHomes(Player $player): Config
@@ -46,7 +54,8 @@ class HomeManager {
             "X" => $position->x,
             "Y" => $position->y,
             "Z" => $position->z,
-            "world" => $position->getWorld(),
+            "world" => $position->getWorld()->getFolderName(),
+            "name" => $name
         ]);
         $file->save();
     }
@@ -60,12 +69,12 @@ class HomeManager {
 
     public function getHomesForm(Player $player): void
     {
-        $menu = new SimpleForm(function (Player $player, int $data = null){
+        $menu = new SimpleForm(function (Player $player, $data = null){
             if($data === null){
                 return;
             }
 
-            if(count($this->getHomes($player)->getAll(true)) < 0){
+            if(count($this->getHomes($player)->getAll(true)) <= 0){
                 return;
             }
 
@@ -83,7 +92,7 @@ class HomeManager {
             $z = $this->getHomes($player)->get($data)["Z"];
             $world = $this->getHomes($player)->get($data)["world"];
             $name = $this->getHomes($player)->get($data)["name"];
-            $player->teleport(new Position($x, $y, $z, $world));
+            $player->teleport(new Position($x, $y, $z, Server::getInstance()->getWorldManager()->getWorldByName($world)));
             $message = Loader::getInstance()->getHomeMesages("teleport-home-message");
             $message = str_replace("{HOME}", $name, $message);
             $player->sendMessage(self::getPrefix().TextFormat::colorize($message));
@@ -92,22 +101,21 @@ class HomeManager {
         $menu->setTitle("§8".$player->getName()."§5 Homes");
         if(is_null($this->getHomes($player)->getAll(true))){
             $menu->addButton("§l§4EXIT",0,"textures/ui/redX1");
-            return;
-        }
-        if(count($this->getHomes($player)->getAll(true)) < 0){
-            $menu->addButton("§l§4EXIT",0,"textures/ui/redX1");
-            return;
-        }
-        foreach ($this->getHomes($player)->getAll(true) as $home) {
-            $menu->addButton($home."\nTap To Teleport",0,"textures/ui/icon_map", $home);
-            return;
+        } else {
+            if (count($this->getHomes($player)->getAll(true)) <= 0) {
+                $menu->addButton("§l§4EXIT", 0, "textures/ui/redX1");
+            } else {
+                foreach ($this->getHomes($player)->getAll(true) as $home) {
+                    $menu->addButton($home . "\nTap To Teleport", 0, "textures/ui/icon_map", $home);
+                }
+            }
         }
         $player->sendForm($menu);
     }
 
     public function getRemoveHomes(Player $player): void
     {
-        $menu = new SimpleForm(function (Player $player, int $data = null){
+        $menu = new SimpleForm(function (Player $player, $data = null){
             if($data === null){
                 return;
             }
@@ -116,7 +124,7 @@ class HomeManager {
                 return;
             }
 
-            if(count($this->getHomes($player)->getAll(true)) < 0){
+            if(count($this->getHomes($player)->getAll(true)) <= 0){
                 return;
             }
 
@@ -125,22 +133,24 @@ class HomeManager {
                 return;
             }
 
+            $name = $this->getHomes($player)->get($data)["name"];
+            $msg = Loader::getInstance()->getHomeMesages("remove-home-message");
+            $msg = str_replace("{HOME}", $name, $msg);
             $this->removeHome($player, $data);
-            $player->sendMessage(self::getPrefix().TextFormat::colorize(Loader::getInstance()->getHomeMesages("remove-home-message")));
+            $player->sendMessage(self::getPrefix().TextFormat::colorize($msg));
 
         });
         $menu->setTitle("§8".$player->getName()."§c Homes");
         if(is_null($this->getHomes($player)->getAll(true))){
             $menu->addButton("§l§4EXIT",0,"textures/ui/redX1");
-            return;
-        }
-        if(count($this->getHomes($player)->getAll(true)) < 0){
-            $menu->addButton("§l§4EXIT",0,"textures/ui/redX1");
-            return;
-        }
-        foreach ($this->getHomes($player)->getAll(true) as $home) {
-            $menu->addButton($home."\nTap To Remove Home",0,"textures/ui/icon_none", $home);
-            return;
+        } else {
+            if (count($this->getHomes($player)->getAll(true)) <= 0) {
+                $menu->addButton("§l§4EXIT", 0, "textures/ui/redX1");
+            } else {
+                foreach ($this->getHomes($player)->getAll(true) as $home) {
+                    $menu->addButton($home . "\nTap To Remove Home", 0, "textures/ui/icon_none", $home);
+                }
+            }
         }
         $player->sendForm($menu);
     }

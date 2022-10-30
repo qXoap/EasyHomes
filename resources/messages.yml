@@ -1,0 +1,13 @@
+# EasyHomes Message Manager by qXoap
+
+#tags
+# use {HOME} for home name
+# use {MAXHOMES} for max homes limit
+
+prefix: "&8(&eEasyHomes&8) &7"
+teleport-home-message: "You has Been Teleported from home &a{HOME}"
+no-exist-home: "This Home No Exist"
+created-home-message: "You Has Been Crated Home &a{HOME} &7Successfully"
+homes-limit-message: "You have exceeded the home limit, Homes Limit &a{MAXHOMES}"
+home-exist-message: "This Home Already Exist!"
+remove-home-message: "You Has Been Removed Home &a{HOME} &7Successfully"
