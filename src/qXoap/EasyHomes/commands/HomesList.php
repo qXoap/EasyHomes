@@ -15,12 +15,13 @@ class HomesList extends Command
     public function __construct()
     {
         parent::__construct("homes", "Home List (qXoap)", null, ["home"]);
+        $this->setPermission("easyhomes.command.home");
     }
 
-    public function execute(CommandSender $player, string $commandLabel, array $args)
+    public function execute(CommandSender $sender, string $commandLabel, array $args): void
     {
-        if (!$player instanceof Player) return;
+        if (!$sender instanceof Player) return;
 
-        HomeManager::getInstance()->getHomesForm($player);
+        HomeManager::getInstance()->getHomesForm($sender);
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Forms\FormAPI;
+namespace qXoap\EasyHomes\libs;
 
 class SimpleForm extends Form {
 

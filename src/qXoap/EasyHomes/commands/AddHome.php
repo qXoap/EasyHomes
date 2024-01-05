@@ -14,37 +14,38 @@ class AddHome extends Command {
     public function __construct()
     {
         parent::__construct("addhome", "Add New Home (qXoap)", null, ["sethome"]);
+        $this->setPermission("easyhomes.command.addhome");
     }
 
-    public function execute(CommandSender $player, string $commandLabel, array $args)
+    public function execute(CommandSender $sender, string $commandLabel, array $args): void
     {
-        if(!$player instanceof Player)return;
+        if(!$sender instanceof Player)return;
 
         if(!isset($args[0])){
-            $player->sendMessage(HomeManager::getPrefix()."Usage /addhome (name)");
+            $sender->sendMessage(HomeManager::getPrefix()."Usage /addhome (name)");
             return;
         }
 
         $name = implode(" ", $args);
 
-        if(HomeManager::getInstance()->isHomeExist($player, $name)){
-            $player->sendMessage(HomeManager::getPrefix().Loader::getInstance()->getHomeMesages("home-exist-message"));
+        if(HomeManager::getInstance()->isHomeExist($sender, $name)){
+            $sender->sendMessage(HomeManager::getPrefix().Loader::getInstance()->getHomeMesages("home-exist-message"));
             return;
         }
 
         $maxhomes = Loader::getInstance()->getHomeConfig("max-homes");
 
-        if(count(HomeManager::getInstance()->getHomes($player)->getAll(true)) >= $maxhomes){
+        if(count(HomeManager::getInstance()->getHomes($sender)->getAll(true)) >= $maxhomes){
             $msg = Loader::getInstance()->getHomeMesages("homes-limit-message");
             $msg = str_replace("{MAXHOMES}", $maxhomes, $msg);
-            $player->sendMessage(HomeManager::getPrefix().TextFormat::colorize($msg));
+            $sender->sendMessage(HomeManager::getPrefix().TextFormat::colorize($msg));
             return;
         }
 
-        HomeManager::getInstance()->setHome($player, $name, $player->getPosition());
+        HomeManager::getInstance()->setHome($sender, $name, $sender->getPosition());
         $msg = Loader::getInstance()->getHomeMesages("created-home-message");
         $msg = str_replace("{HOME}", $name, $msg);
-        $player->sendMessage(HomeManager::getPrefix().TextFormat::colorize($msg));
+        $sender->sendMessage(HomeManager::getPrefix().TextFormat::colorize($msg));
 
     }
 }

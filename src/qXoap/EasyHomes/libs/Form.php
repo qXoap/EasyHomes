@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Forms\FormAPI;
+namespace qXoap\EasyHomes\libs;
 
 use pocketmine\form\Form as IForm;
 use pocketmine\player\Player;
@@ -50,7 +50,8 @@ abstract class Form implements IForm{
     public function processData(&$data) : void {
     }
 
-    public function jsonSerialize(){
+    public function jsonSerialize(): array
+    {
         return $this->data;
     }
 }

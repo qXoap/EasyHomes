@@ -1,10 +1,16 @@
 name: EasyHomes
 main: qXoap\EasyHomes\Loader
-api: 4.0.0
+api: 5.0.0
 version: 1.0.0
 author: qXoap
 
 permissions:
-  homes.admin:
-    description: "Admin permission"
-    default: op
+  easyhomes.command.addhome:
+    description: "addhome permission"
+    default: true
+  easyhomes.command.home:
+    description: "home permission"
+    default: true
+  easyhomes.command.removehome:
+    description: "removehome permission"
+    default: true

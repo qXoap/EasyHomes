@@ -2,16 +2,17 @@
 
 namespace qXoap\EasyHomes\manager;
 
-use Forms\FormAPI\SimpleForm;
 use pocketmine\player\Player;
 use pocketmine\Server;
 use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
 use pocketmine\utils\TextFormat;
 use pocketmine\world\Position;
+use qXoap\EasyHomes\libs\SimpleForm;
 use qXoap\EasyHomes\Loader;
 
-class HomeManager {
+class HomeManager
+{
     use SingletonTrait;
 
     public function __construct()
@@ -31,7 +32,7 @@ class HomeManager {
         return new Config(Loader::getInstance()->getDataFolder() . "data/".$player->getName().".yml", Config::YAML);
     }
 
-    public function isHomeExist(Player $player, string $name)
+    public function isHomeExist(Player $player, string $name): bool
     {
         $file = Loader::getInstance()->getDataFolder() . "data/".$player->getName().".yml";
         if(file_exists($file)){
@@ -42,12 +43,12 @@ class HomeManager {
         return false;
     }
 
-    public static function getPrefix()
+    public static function getPrefix(): string
     {
         return TextFormat::colorize(Loader::getInstance()->getHomeMesages("prefix"));
     }
 
-    public function setHome(Player $player, string $name, Position $position)
+    public function setHome(Player $player, string $name, Position $position): void
     {
         $file = new Config(Loader::getInstance()->getDataFolder() . "data/".$player->getName().".yml", Config::YAML);
         $file->set($name, [
@@ -60,7 +61,7 @@ class HomeManager {
         $file->save();
     }
 
-    public function removeHome(Player $player, string $name)
+    public function removeHome(Player $player, string $name): void
     {
         $file = new Config(Loader::getInstance()->getDataFolder() . "data/".$player->getName().".yml", Config::YAML);
         $file->remove($name);
