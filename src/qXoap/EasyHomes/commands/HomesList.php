@@ -15,6 +15,7 @@ class HomesList extends Command
     public function __construct()
     {
         parent::__construct("homes", "Home List (qXoap)", null, ["home"]);
+        $this->setPermission("easyhomes.command.home");
     }
 
     public function execute(CommandSender $player, string $commandLabel, array $args)
