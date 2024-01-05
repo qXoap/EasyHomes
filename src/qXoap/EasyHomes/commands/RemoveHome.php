@@ -15,10 +15,10 @@ class RemoveHome extends Command {
         $this->setPermission("easyhomes.command.removehome");
     }
 
-    public function execute(CommandSender $player, string $commandLabel, array $args)
+    public function execute(CommandSender $sender, string $commandLabel, array $args): void
     {
-        if(!$player instanceof Player)return;
+        if(!$sender instanceof Player)return;
 
-        HomeManager::getInstance()->getRemoveHomes($player);
+        HomeManager::getInstance()->getRemoveHomes($sender);
     }
 }
