@@ -2,13 +2,13 @@
 
 namespace qXoap\EasyHomes\manager;
 
-use Forms\FormAPI\SimpleForm;
 use pocketmine\player\Player;
 use pocketmine\Server;
 use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
 use pocketmine\utils\TextFormat;
 use pocketmine\world\Position;
+use qXoap\EasyHomes\libs\SimpleForm;
 use qXoap\EasyHomes\Loader;
 
 class HomeManager {
