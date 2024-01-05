@@ -14,6 +14,7 @@ class AddHome extends Command {
     public function __construct()
     {
         parent::__construct("addhome", "Add New Home (qXoap)", null, ["sethome"]);
+        $this->setPermission("easyhomes.command.addhome");
     }
 
     public function execute(CommandSender $player, string $commandLabel, array $args)
