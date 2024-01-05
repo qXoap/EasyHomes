@@ -12,6 +12,7 @@ class RemoveHome extends Command {
     public function __construct()
     {
         parent::__construct("rmhome", "Remove Home (qXoap)", null, ["delhome"]);
+        $this->setPermission("easyhomes.command.removehome");
     }
 
     public function execute(CommandSender $player, string $commandLabel, array $args)
